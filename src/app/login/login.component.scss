@@ -1,0 +1,17 @@
+.login-container {
+    display: flex;
+    justify-content: center; /* center horizontally */
+    align-items: center;     
+    min-height: 100vh;       /* take up full viewport height */
+    background: #f5f5f5;     /* a light gray background */
+  }
+  
+  .login-card {
+    width: 400px;
+    padding: 1rem;
+  }
+  
+  .token-field {
+    width: 100%;
+  }
+  

@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Product } from '../interfaces/product.interface';
@@ -9,7 +9,7 @@ import { environment } from '../environments/environments';
 export class ProductService {
   private baseUrl = environment.apiBaseUrl;
 
-  constructor(private http: HttpClient) {}
+  protected readonly http = inject(HttpClient);
 
   private getAuthHeaders(): HttpHeaders {
     const token = localStorage.getItem('authToken') || '';
