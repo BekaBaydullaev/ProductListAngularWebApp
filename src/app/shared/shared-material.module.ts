@@ -13,6 +13,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatDividerModule } from '@angular/material/divider';
 
 @NgModule({
   imports: [
@@ -30,7 +31,8 @@ import { MatToolbarModule } from '@angular/material/toolbar';
     MatTable,
     MatIconModule,
     MatCardModule,
-    MatToolbarModule 
+    MatToolbarModule,
+    MatDividerModule 
   ],
   exports: [
     MatButtonModule,
@@ -47,7 +49,8 @@ import { MatToolbarModule } from '@angular/material/toolbar';
     MatTable,
     MatIconModule,
     MatCardModule,
-    MatToolbarModule 
+    MatToolbarModule,
+    MatDividerModule 
   ]
 })
 export class SharedMaterial {}

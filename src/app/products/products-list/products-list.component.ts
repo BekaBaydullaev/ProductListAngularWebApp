@@ -9,6 +9,8 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
 import { ProductDetailDialogComponent } from '../product-detail-dialog/product-detail-dialog.component';
+import { NotificationService } from '../../service/notification-dialog.service';
+import { NotificationType } from '../../interfaces/notification-dialog-data.interface';
 
 @Component({
   selector: 'app-products-list',
@@ -27,7 +29,7 @@ export class ProductsListComponent implements OnInit {
   protected readonly productService = inject(ProductService);
   protected readonly router = inject(Router);
   protected readonly dialog = inject(MatDialog);
-
+  protected readonly notificationService = inject(NotificationService);
 
   ngOnInit(): void {
     this.loadProducts();
@@ -47,33 +49,23 @@ export class ProductsListComponent implements OnInit {
   }
 
   onCreateNew() {
-    // Open dialog in create mode
     const dialogRef = this.dialog.open(ProductDetailDialogComponent, {
       width: '900px',
       height: '700px',
       panelClass: 'custom-dialog-container',
       disableClose: true,
       autoFocus: false,
-      data: { product: {} } // empty product object
+      data: { product: {} }
     });
 
-    // Wait for result
-    dialogRef.afterClosed().subscribe((result: Product | null) => {
-      if (result) {
-        // If not null, user saved
-        this.productService.createProduct(result).subscribe({
-          next: () => {
-            alert('Product created successfully');
-            this.loadProducts();
-          },
-          error: (err) => console.error(err)
-        });
+    dialogRef.afterClosed().subscribe((success: boolean) => {
+      if (success) {
+        this.loadProducts();
       }
     });
   }
 
   onEditProduct(product: Product) {
-    // Open dialog in edit mode
     const dialogRef = this.dialog.open(ProductDetailDialogComponent, {
       width: '900px',
       height: '700px',
@@ -83,36 +75,39 @@ export class ProductsListComponent implements OnInit {
       data: { product }
     });
 
-    dialogRef.afterClosed().subscribe((updated: Product | null) => {
-      if (updated && updated.id) {
-        // Patch existing
-        const partialUpdate = {
-          name: updated.name,
-          description: updated.description,
-          cost: updated.cost
-          // profile, if you have it
-        };
-        this.productService.updateProduct(updated.id, partialUpdate).subscribe({
-          next: () => {
-            alert('Product updated successfully');
-            this.loadProducts();
-          },
-          error: (err) => console.error(err)
-        });
+    dialogRef.afterClosed().subscribe((success: boolean) => {
+      if (success) {
+        this.loadProducts();
       }
     });
   }
 
   onDeleteProduct(productId: number, productName: string) {
-    const confirmation = confirm(`Are you sure you want to delete product [${productName}]?`);
-    if (!confirmation) return;
-    this.productService.deleteProduct(productId).subscribe({
-      next: () => {
-        alert('Product deleted successfully.');
-        this.loadProducts();
-      },
-      error: (err) => alert('Delete failed: ' + err)
-    });
+    this.notificationService
+      .showConfirmation(
+        `Are you sure you want to delete product [${productName}]?`,
+        'Confirm Delete'
+      )
+      .subscribe((confirmed: boolean) => {
+        if (confirmed) {
+          this.productService.deleteProduct(productId).subscribe({
+            next: () => {
+              this.notificationService.showNotification(
+                NotificationType.Success,
+                'Product deleted successfully',
+                'Delete'
+              );
+              this.loadProducts();
+            },
+            error: (err) => 
+              this.notificationService.showNotification(
+                NotificationType.Error,
+                'Delete failed: ' + err,
+                'Delete'
+              )
+          });
+        }
+      });
   }
 
   applyFilter(event: Event) {

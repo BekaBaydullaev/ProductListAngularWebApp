@@ -1,8 +1,11 @@
 <div class="dialog-container">
   <div class="dialog-header">
-    <h2 mat-dialog-title>
-      {{ isCreateMode ? 'Create New Product' : 'Edit Product #' + data?.product?.id }}
-    </h2>
+    <h3 mat-dialog-title class="header-title">
+      {{ isCreateMode ? 'Create New Product' : 'Edit Product: ' }}
+      <span class="product-name" [title]="data.product?.name">
+        {{ isCreateMode ? '' : data.product?.name }}
+      </span>
+    </h3>
     <button mat-icon-button (click)="onCancel()" class="close-button">
       <mat-icon>close</mat-icon>
     </button>
