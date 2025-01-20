@@ -1,17 +1,24 @@
-  <div class="products-container">
-    <mat-card>
-      <mat-card-header>
-        <mat-card-title>Products</mat-card-title>
-        <mat-card-subtitle>Manage your product inventory</mat-card-subtitle>
-      </mat-card-header>
+<div style="margin: 2rem;">
+    <h2>Products</h2>
+    <button mat-raised-button color="primary" (click)="onCreateNew()">
+      Create New
+    </button>
   
-      <mat-card-content>
-        <button mat-raised-button color="primary" (click)="onCreateNew()">
-          <mat-icon>add</mat-icon> Create New
-        </button>
+    <!-- Filter input -->
+    <mat-form-field appearance="fill" style="margin-left: 1rem;">
+      <mat-label>Search Products</mat-label>
+      <input matInput (input)="applyFilter($event)" placeholder="Type to filter..." />
+    </mat-form-field>
   
-        <table mat-table [dataSource]="products" class="mat-elevation-z8" style="margin-top: 1rem;">
-          <!-- Index Column -->
+    <!-- Table -->
+    <table
+      mat-table
+      [dataSource]="dataSource"
+      matSort
+      class="mat-elevation-z8"
+      style="margin-top: 1rem;"
+    >
+      <!-- Index Column -->
       <ng-container matColumnDef="index">
         <th mat-header-cell *matHeaderCellDef>#</th>
         <td mat-cell *matCellDef="let product; let i = index;">{{ i + 1 }}</td>
@@ -19,19 +26,19 @@
   
       <!-- SKU Column -->
       <ng-container matColumnDef="sku">
-        <th mat-header-cell *matHeaderCellDef>SKU</th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>SKU</th>
         <td mat-cell *matCellDef="let product;">{{ product.sku }}</td>
       </ng-container>
   
       <!-- Name Column -->
       <ng-container matColumnDef="name">
-        <th mat-header-cell *matHeaderCellDef>Name</th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
         <td mat-cell *matCellDef="let product;">{{ product.name }}</td>
       </ng-container>
   
       <!-- Cost Column -->
       <ng-container matColumnDef="cost">
-        <th mat-header-cell *matHeaderCellDef>Cost</th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Cost</th>
         <td mat-cell *matCellDef="let product;">{{ product.cost }}</td>
       </ng-container>
   
@@ -39,19 +46,28 @@
       <ng-container matColumnDef="actions">
         <th mat-header-cell *matHeaderCellDef>Actions</th>
         <td mat-cell *matCellDef="let product;">
-          <button mat-icon-button color="accent" (click)="onEditProduct(product.id!)">
+          <button mat-icon-button color="accent" (click)="onEditProduct(product); $event.stopPropagation()">
             <mat-icon>edit</mat-icon>
           </button>
-          <button mat-icon-button color="warn" (click)="onDeleteProduct(product.id!, product.name)">
+          <button mat-icon-button color="warn" (click)="onDeleteProduct(product.id!, product.name); $event.stopPropagation()">
             <mat-icon>delete</mat-icon>
           </button>
         </td>
       </ng-container>
   
+      <!-- Header and Row Definitions -->
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-        </table>
-      </mat-card-content>
-    </mat-card>
+      <tr
+        mat-row
+        *matRowDef="let row; columns: displayedColumns;"
+        (dblclick)="onEditProduct(row)"
+      ></tr>
+    </table>
+  
+    <!-- Paginator -->
+    <mat-paginator
+      [pageSizeOptions]="[10, 25, 50, 100]"
+      showFirstLastButtons
+    ></mat-paginator>
   </div>
   

@@ -1,11 +1,13 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatIconModule } from '@angular/material/icon';
 import { Product } from '../../interfaces/product.interface';
 // Add more Material modules as needed (e.g., MatSelect for "type" in 'profile')
 
@@ -14,11 +16,13 @@ import { Product } from '../../interfaces/product.interface';
   standalone: true,
   imports: [
     CommonModule,
+    ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
-    MatCheckboxModule
-    // If you're using ReactiveFormsModule globally, you don't need to re-import it here
+    MatCheckboxModule,
+    MatDividerModule,
+    MatIconModule
   ],
   templateUrl: './product-detail-dialog.component.html',
   styleUrls: ['./product-detail-dialog.component.scss']
@@ -76,6 +80,11 @@ export class ProductDetailDialogComponent implements OnInit {
 
   // A helper getter to easily check validation
   get f() {
-    return this.form.controls;
+    return {
+      name: this.form.get('name'),
+      description: this.form.get('description'),
+      sku: this.form.get('sku'),
+      cost: this.form.get('cost')
+    };
   }
 }

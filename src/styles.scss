@@ -2,3 +2,26 @@
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.custom-dialog-container {
+  .mat-mdc-dialog-container {
+    padding: 0;
+  }
+
+  .mat-mdc-dialog-surface {
+    border-radius: 12px !important;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.1) !important;
+  }
+}
+
+.mdc-text-field--outlined {
+  --mdc-outlined-text-field-container-shape: 8px;
+}
+
+.mat-mdc-raised-button.mat-primary {
+  --mdc-protected-button-container-shape: 8px;
+}
+
+.mat-mdc-button {
+  --mdc-text-button-container-shape: 8px;
+}

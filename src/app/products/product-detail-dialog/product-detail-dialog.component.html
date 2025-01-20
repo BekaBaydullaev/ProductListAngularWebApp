@@ -1,1 +1,61 @@
-<p>product-detail-dialog works!</p>
+<div class="dialog-container">
+  <div class="dialog-header">
+    <h2 mat-dialog-title>
+      {{ isCreateMode ? 'Create New Product' : 'Edit Product #' + data?.product?.id }}
+    </h2>
+    <button mat-icon-button (click)="onCancel()" class="close-button">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <mat-divider></mat-divider>
+
+  <div mat-dialog-content class="dialog-content">
+    <form [formGroup]="form" class="form-container">
+      <div class="form-row">
+        <mat-form-field appearance="outline" class="field">
+          <mat-label>Product Name</mat-label>
+          <mat-icon matPrefix>inventory_2</mat-icon>
+          <input matInput formControlName="name" placeholder="Enter product name" />
+          <mat-error *ngIf="f['name']?.errors?.['required']">Name is required</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="field">
+          <mat-label>SKU</mat-label>
+          <mat-icon matPrefix>qr_code</mat-icon>
+          <input matInput formControlName="sku" placeholder="Enter SKU code" />
+          <mat-error *ngIf="f['sku']?.errors?.['required']">SKU is required</mat-error>
+        </mat-form-field>
+      </div>
+
+      <mat-form-field appearance="outline" class="field">
+        <mat-label>Description</mat-label>
+        <mat-icon matPrefix>description</mat-icon>
+        <textarea matInput rows="4" formControlName="description" 
+                  placeholder="Enter detailed product description"></textarea>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="field">
+        <mat-label>Cost</mat-label>
+        <mat-icon matPrefix>attach_money</mat-icon>
+        <input matInput type="number" formControlName="cost" step="0.01" placeholder="0.00" />
+        <mat-error *ngIf="f['cost']?.errors?.['required']">Cost is required</mat-error>
+        <mat-error *ngIf="f['cost']?.errors?.['min']">Cost must be at least $0.01</mat-error>
+        <mat-error *ngIf="f['cost']?.errors?.['max']">Cost exceeds maximum limit</mat-error>
+      </mat-form-field>
+    </form>
+  </div>
+
+  <mat-divider></mat-divider>
+
+  <div mat-dialog-actions class="dialog-footer">
+    <button mat-button (click)="onCancel()">
+      <mat-icon>close</mat-icon>
+      Cancel
+    </button>
+    <button mat-raised-button color="primary" (click)="onSave()">
+      <mat-icon>{{ isCreateMode ? 'add_circle' : 'save' }}</mat-icon>
+      {{ isCreateMode ? 'Create Product' : 'Save Changes' }}
+    </button>
+  </div>
+</div>
